@@ -1,0 +1,193 @@
+\chapter{Конструкторская часть}
+В данном разделе будут представлены схемы алгоритмов сортировок: бисерной сортировки, поразрядной сортировки и сортировки бинарным деревом.
+
+\section{Разработка алгоритмов}
+Схемы алгоритма бисерной сортировки представлены на рисунках \ref{img:bead1}--\ref{img:bead2}. Схемы алгоритма поразрядной сортировки представлены на рисунках \ref{img:radix1}--\ref{img:radix2}. Схемы алгоритма сортировки бинарным деревом представлены на рисунках \ref{img:tree1}--\ref{img:tree3}.
+\clearpage
+\img{150mm}{bead1}{Схема алгоритма бисерной сортировки (часть 1)}
+\img{200mm}{bead2}{Схема алгоритма бисерной сортировки (часть 2)}
+\img{180mm}{radix1}{Схема алгоритма поразрядной сортировки (часть 1)}
+\img{162mm}{radix2}{Схема алгоритма поразрядной сортировки (часть 2)}
+\img{200mm}{tree1}{Схема алгоритма сортировки бинарным деревом (часть 1)}
+\img{160mm}{tree2}{Схема алгоритма сортировки бинарным деревом (часть 2)}
+\img{160mm}{tree3}{Схема алгоритма сортировки бинарным деревом (часть 3)}
+\clearpage
+
+\section{Описание типов данных}
+При реализации алгоритмов будут использованы следующие типы и структуры данных:
+\begin{enumerate}
+    \item массив --- одномерный массив целых чисел;
+    \item целое число --- длина массива.
+\end{enumerate}
+
+
+\section{Модель вычислений для проведения оценки трудоемкости}
+
+Введем модель вычислений, которая потребуется для определения трудоемкости каждого отдельного взятого алгоритма сортировки.
+\begin{enumerate}[label={\arabic*)}]
+	\item Трудоемкость базовых операций.
+	\begin{itemize}[label=---]
+		\item Трудоемкость равна 1 для следующих базовых операций: +, -, =, +=, -=, ==, !=, <, >, <=, >=, [], ++, {-}-,\\
+		\&\&, >>, <<, ||, \&, |.
+		\item Трудоемкость равна 2 для следующих базовых операций: *, /, \%, *=, /=, \%=
+	\end{itemize}
+	\item Трудоемкость условного оператора:
+	\begin{equation}
+		\label{for:if}
+		f_{if} = f_{\text{условия}} + 
+		\begin{cases}
+			min(f_1, f_2), & \text{лучший случай}\\
+			max(f_1, f_2), & \text{худший случай}
+		\end{cases}
+	\end{equation}
+	где f1 --- это трудоёмкость вычисления блок $if$, f2 --- это трудоёмкость вычисления блок $else$.
+	\clearpage
+	\item Трудоемкость цикла:
+	\begin{equation}
+		\label{for:for}
+		\begin{gathered}
+			f_{for} = f_{\text{инициализация}} + f_{\text{сравнения}} + M_{\text{итераций}} \cdot (f_{\text{тело}} +\\
+			+ f_{\text{инкремент}} + f_{\text{сравнения}})
+		\end{gathered}
+	\end{equation}
+	\item Трудоемкость передачи параметра в функции и возврат из функции равны 0.
+\end{enumerate}
+
+\section{Трудоемкость алгоритмов}
+\subsection{Бисерная сортировка}
+Для алгоритма бинарной сортировки трудоемкость будет слагаться из следующих составляющих:
+
+\begin{itemize}[label=---]
+	\item определения длины $N$, максимального значения $max\_elem (M)$ массива, их трудоёмкость равна
+	\begin{equation}
+		\label{complexity:def1}
+		f_{def} = N + N = 2N;
+	\end{equation}
+	
+	\item создания и заполнения массива $transposedArr$, трудоёмкость которого равна
+	\begin{equation}
+		\label{сomplexity:v_init}
+		\begin{gathered}
+			f_{init} = M + 2 + N \cdot (2 + 2 + M \cdot (2 + 1 + 1)) = \\
+			= 4MN + 4N + M + 2;
+		\end{gathered}
+	\end{equation}
+	
+	\item получения отсортированного массива с помощью массива $transposedArr$, трудоёмкость которого равна
+	\begin{equation}
+		\label{complexity:res1}
+		\begin{gathered}
+			f_{res} = 2 + N \cdot (2 + 2 + 2 + M \cdot (1 + 1)) = \\
+			= 2MN + 6N + 2;
+		\end{gathered}
+	\end{equation}
+	
+	\item присваивание временного массива исходному, трудоёмкость которого равна
+	\begin{equation}
+	\label{complexity:assign}
+	\begin{gathered}
+		f_{assign} = N.
+	\end{gathered}
+	\end{equation}
+	
+\end{itemize}
+Поэтому трудоёмкость алгоритма бисерной сортировки вичисляется следующим образом:
+\begin{equation}
+	\label{сomplexity:bead_worst}
+	\begin{gathered}
+		f_{bead\_sort} = f_{def} + f_{init} + f_{res} + f_{assign} \approx 6NM
+	\end{gathered}
+\end{equation}
+
+\subsection{Поразрядная сортировка}
+Для алгоритма поразрядной сортировки трудоемкость будет слагаться из следующих составляющих:
+\begin{itemize}
+	\item определения длины $N$, максимального значения $max\_elem (M)$ массива, их трудоёмкость равна
+	\begin{equation}
+		\label{complexity1:def2}
+		f_{def} = N + N = 2N;
+	\end{equation}
+	
+	\item главного цикла, сортирующего массив по каждой цифре, трудоёмкость которого равна
+	\begin{equation}
+		\label{сomplexity1:res}
+		\begin{gathered}
+			f_{res} = 4 + \log_{10} M \cdot (17 + 8 \cdot N) + 2 + 10 \cdot(2 + 4) + 2 + 19 \cdot N + N) = \\
+			= 28N\log_{10} M + 81\log_{10} M + 4;
+		\end{gathered}
+	\end{equation}
+
+	\item присваивание временного массива исходному, трудоёмкость которого равна
+	\begin{equation}
+	\label{complexity1:assign}
+		\begin{gathered}
+			f_{assign} = N.
+		\end{gathered}
+	\end{equation}	
+
+\end{itemize}	
+Поэтому трудоёмкость алгоритма бисерной сортировки вичисляется следующим образом: 
+\begin{equation}
+	\label{сomplexity:radix_worst}
+	\begin{gathered}
+		f_{radix\_sort} = f_{def} + f_{res} + f_{assign} \approx 28N\log_{10}M = O(N\log(M))
+	\end{gathered}
+\end{equation}
+
+
+\subsection{Сортировка бинарным деревом}
+
+Трудоемкость алгоритма сортировки бинарным деревом состоит из следующих составляющих:
+\begin{itemize}
+	\item трудоемкость построения бинарного дерева, которая равна
+	\begin{equation}
+		\label{сomplexity2:make_tree}
+		\begin{gathered}
+			f_{make\_tree} =
+			\begin{cases}
+				N \cdot \log(N), & \text{неотсортированный массив} \\
+				N \cdot N, & \text{отсортированный массив}
+			\end{cases}
+		\end{gathered}  
+	\end{equation}
+	
+	\item трудоемкость восстановления порядка элементов массива, которая равна
+	\begin{equation}
+	\label{сomplexity2:make_arr}
+	\begin{gathered}
+		f_{make\_arr} =
+		\begin{cases}
+			N \cdot \log(N), & \text{дерево сбалансировано} \\
+			N \cdot N, & \text{дерево несбалансировано}
+		\end{cases}
+	\end{gathered}  
+	\end{equation}	
+	
+	\item трудоемкость присваивания временного массива исходному, которая равна
+	\begin{equation}
+		\label{assign_arr}
+		f_{res} = N.
+	\end{equation}
+	
+\end{itemize}
+
+Тогда для худшего случая (массив отсортирован) имеем:
+\begin{equation}
+	\label{сomplexity:tree_worst}
+	\begin{gathered}
+		f_{worst} = f_{make\_tree} + f_{make\_arr} + f_{assign\_arr} \approx N \cdot N = O(N^2)
+	\end{gathered}
+\end{equation}
+
+Для лучшего случая (массив неотсортирован) имеем:
+\begin{equation}
+	\label{сomplexity:tree_best}
+	\begin{gathered}
+		f_{best} = f_{make\_tree} + f_{make\_arr} + f_{assign\_arr} \approx N \log(N) = O(N\log(N))
+	\end{gathered}
+\end{equation}
+
+
+\section*{Вывод}
+Были представлены схемы алгоритмов сортировок. Были указаны типы данных, используемые для реализации. Проведённая теоретическая оценка трудоемкости алгоритмов показала, что в трудоёмкость выполнения алгоритма бисерной сортировки и поразрядной сортировки зависит от количество элементов и максимального значения массива. Тажке трудоёмкость выполнения алгоритма сортировки бинарным деревом в лучшем случае $N\log(N)$, а в худшем случае $N^2$.
+%TODO вывод о трудоёмкости

@@ -1,0 +1,55 @@
+\chapter{Технологическая часть}
+
+В данном разделе будут приведены средства реализации, реализация алгоритма, а также функциональные тесты.
+
+
+\section{Средства реализации}
+
+В данной работе для реализации был выбран язык программирования \textit{Python} \cite{bib3}, так как он предоставляет весь необходимый функционал для выполнения работы. 
+
+Визуализация графиков с помощью библиотеки $Matplolib$ \cite{bib4}.
+
+\section{Реализация алгоритмов}
+
+В листингах \ref{lst:algo} представлены функции для алгоритма поиска.
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:algo,caption=Функция алгоритма поиска]
+def search(self, root, key):
+	if root is None or root.key == key:
+		return root
+	if key < root.key:
+		return self.search(root.left, key)
+	else:
+		return self.search(root.right, key)
+\end{lstlisting}
+\end{center}
+
+\section{Функциональные тесты}
+
+В таблице \ref{tbl:functional_test} приведены функциональные тесты для двоичного дерева поиска и сбалансированного дерева. Все тесты пройдены успешно.
+
+\begin{table}[h]
+	\begin{center}
+	\begin{threeparttable}
+		\captionsetup{justification=raggedright,singlelinecheck=off}
+		\caption{\label{tbl:functional_test} Функциональные тесты}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			 N & Элементы & число & Ожидаемый результат 
+			\\ \hline
+			-1 &  &  & Сообщение об ошибке 
+			\\ \hline
+			 7 & 1 4 2 3 -1 0 -2 & 0 & Узел в дерево 
+			\\ \hline
+			 5 & 5 2 3 4 1 & -2 & None 
+			\\ \hline
+		\end{tabular}
+	\end{threeparttable}
+	\end{center}
+\end{table}
+
+\section*{Вывод}
+
+В данном разделе будут приведены средства реализации, реализация алгоритма, а также функциональные тесты.

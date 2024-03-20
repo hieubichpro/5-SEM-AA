@@ -1,0 +1,11 @@
+*.aux
+*.bbl
+*.log
+*.out
+*.gz
+*.toc
+.vscode
+*.user
+.vs
+*.filters
+Debug
